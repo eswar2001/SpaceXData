@@ -2,6 +2,7 @@ body {
   width: 100%;
   height: 100%;
   background-color: black;
+  color: white;
 }
 html {
   --scrollbarBG: #cfd8dc;
@@ -20,4 +21,7 @@ body::-webkit-scrollbar-thumb {
   background-color: var(--thumbBG);
   border-radius: 6px;
   border: 3px solid var(--scrollbarBG);
+}
+.custom-select {
+  color: black;
 }
