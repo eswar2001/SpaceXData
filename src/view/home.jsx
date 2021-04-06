@@ -15,7 +15,6 @@ export const Home = () => {
             .then(res => res.json())
             .then(json => {
                 setdata(json);
-                console.log(json);
             });
     }
 
@@ -53,7 +52,6 @@ export const Home = () => {
                             <label htmlFor="year">Launch Year:</label>
                             <select className="custom-select text-white bg-dark" onChange={(e) => {
                                 setlaunchYear(e.target.value);
-                                console.log(e.target.value);
                             }} defaultValue={launchYear} name="year" id="year">
                                 <option value="">All</option>
                                 <option value="2020">2020</option>
@@ -178,7 +176,6 @@ export const Home = () => {
                             <label htmlFor="launch">Successful launch:</label>
                             <select className="custom-select text-white bg-dark" onChange={(e) => {
                                 setsLaunch(e.target.value);
-                                console.log(e.target.value);
                             }} defaultValue={sLaunch} name="launch" id="launch">
                                 <option value="true">true</option>
                                 <option value="false">false</option>
@@ -189,7 +186,6 @@ export const Home = () => {
                             <label htmlFor="landing">Successful landing:</label>
                             <select className="custom-select text-white bg-dark" onChange={(e) => {
                                 setSland(e.target.value);
-                                console.log(e.target.value);
                             }} defaultValue={Sland} name="landing" id="landing">
                                 <option value="true">true</option>
                                 <option value="false">false</option>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 export const Detail = () => {
     const data = JSON.parse((localStorage.getItem('detail')));
-    console.log(data);
     return (
         <>
             <div className="container">
