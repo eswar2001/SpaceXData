@@ -1,0 +1,16 @@
+.card {
+  background-color: #121212;
+  color: white;
+  font-display: unset;
+}
+.card-title {
+  color: #bb86fc;
+}
+em {
+  color: #03dac6;
+}
+a {
+  color: pink !important;
+  text-decoration: none;
+  text-rendering: auto;
+}
