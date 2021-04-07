@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Missioncard } from '../components/missioncard'
 export const Home = () => {
     const [data, setdata] = useState([]);
@@ -26,9 +25,12 @@ export const Home = () => {
             setsLaunch(filter.sLaunch === "true" ? true : false);
             setlaunchYear(filter.launchYear === "-1" ? "-1" : parseInt(filter.launchYear));
             setReload(true);
+            setLimit(100);
         }
     }, [])
-
+    useEffect(() => {
+        console.log('state changed');
+    }, [Sland, launchYear, limit, sLaunch]);
     useEffect(() => {
         var url = `https://api.spacexdata.com/v3/launches?limit=${limit}`;
 
@@ -45,7 +47,6 @@ export const Home = () => {
         url = url.replace('&launch_success=-1', '');
         url = url.replace('&land_success=-1', '');
         setUrl(url);
-        console.log(url);
         fetchData();
         setReload(false);
     }, [reLoad])
@@ -63,7 +64,6 @@ export const Home = () => {
                             <label htmlFor="year">Launch Year:</label>
                             <select className="custom-select text-white bg-dark" onChange={(e) => {
                                 setlaunchYear(e.target.value);
-                                console.log(e.target.value);
                             }} defaultValue={launchYear.toString()} name="year" id="year">
                                 <option value="-1">All</option>
                                 <option value="2020">2020</option>

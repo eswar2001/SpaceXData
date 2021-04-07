@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 export const Detail = () => {
     const data = JSON.parse((localStorage.getItem('detail')));
