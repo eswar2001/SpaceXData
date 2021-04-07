@@ -4,13 +4,14 @@ import { Missioncard } from '../components/missioncard'
 export const Home = () => {
     const [data, setdata] = useState([]);
     const [limit, setLimit] = useState(100);
-    const [launchYear, setlaunchYear] = useState("");
-    const [sLaunch, setsLaunch] = useState("null");
-    const [Sland, setSland] = useState("null");
+    const [launchYear, setlaunchYear] = useState(-1);
+    const [sLaunch, setsLaunch] = useState(-1);
+    const [Sland, setSland] = useState(-1);
     const [reLoad, setReload] = useState(false);
 
     const [URL, setUrl] = useState(`https://api.spacexdata.com/v3/launches?limit=${limit}`);
     const fetchData = () => {
+
         fetch(URL)
             .then(res => res.json())
             .then(json => {
@@ -19,20 +20,30 @@ export const Home = () => {
     }
 
     useEffect(() => {
-        fetchData();
+        if (localStorage.getItem('filter')) {
+            var filter = JSON.parse(localStorage.getItem('filter'));
+            setSland(filter.Sland === "true" ? true : false);
+            setsLaunch(filter.sLaunch === "true" ? true : false);
+            setlaunchYear(filter.launchYear === "-1" ? "-1" : parseInt(filter.launchYear));
+            setReload(true);
+        }
     }, [])
+
     useEffect(() => {
         var url = `https://api.spacexdata.com/v3/launches?limit=${limit}`;
 
-        if (sLaunch !== 'null') {
-            url += `&launch_success=${sLaunch}`
+        if (sLaunch !== -1) {
+            url += `&launch_success=${sLaunch}`;
         }
-        if (Sland !== 'null') {
+        if (Sland !== -1) {
             url += `&land_success=${Sland}`;
         }
-        if (launchYear !== "") {
+        if (launchYear !== -1) {
             url += `&launch_year=${launchYear}`;
         }
+        url = url.replace('&launch_year=-1', '');
+        url = url.replace('&launch_success=-1', '');
+        url = url.replace('&land_success=-1', '');
         setUrl(url);
         console.log(url);
         fetchData();
@@ -52,8 +63,9 @@ export const Home = () => {
                             <label htmlFor="year">Launch Year:</label>
                             <select className="custom-select text-white bg-dark" onChange={(e) => {
                                 setlaunchYear(e.target.value);
-                            }} defaultValue={launchYear} name="year" id="year">
-                                <option value="">All</option>
+                                console.log(e.target.value);
+                            }} defaultValue={launchYear.toString()} name="year" id="year">
+                                <option value="-1">All</option>
                                 <option value="2020">2020</option>
                                 <option value="2019">2019</option>
                                 <option value="2018">2018</option>
@@ -176,26 +188,35 @@ export const Home = () => {
                             <label htmlFor="launch">Successful launch:</label>
                             <select className="custom-select text-white bg-dark" onChange={(e) => {
                                 setsLaunch(e.target.value);
-                            }} defaultValue={sLaunch} name="launch" id="launch">
+                            }} defaultValue={sLaunch.toString()} name="launch" id="launch">
                                 <option value="true">true</option>
                                 <option value="false">false</option>
-                                <option value="null">All</option>
+                                <option value="-1">All</option>
                             </select>
                         </div>
                         <div className="col-md-3 col-sm-12">
                             <label htmlFor="landing">Successful landing:</label>
                             <select className="custom-select text-white bg-dark" onChange={(e) => {
                                 setSland(e.target.value);
-                            }} defaultValue={Sland} name="landing" id="landing">
+                            }} defaultValue={Sland.toString()} name="landing" id="landing">
                                 <option value="true">true</option>
                                 <option value="false">false</option>
-                                <option value="null">All</option>
+                                <option value="-1">All</option>
                             </select>
                         </div>
                         <div className="col-md-3 col-sm-12">
-                            <center><button style={{ width: '100px' }} onClick={(e) => {
-                                setReload(true);
-                            }} type="button" class="btn text-white bg-dark mt-3">Filter</button>
+                            <center>
+                                <button style={{ width: '100px' }} onClick={(e) => {
+                                    setReload(true);
+                                    localStorage.setItem('filter', JSON.stringify({ sLaunch, Sland, launchYear }));
+                                }} type="button" className="btn text-white bg-dark mt-3">Filter</button>
+                                <button style={{ width: '100px' }} onClick={(e) => {
+                                    localStorage.clear();
+                                    setReload(false);
+                                    setSland(-1);
+                                    setsLaunch(-1);
+                                    setlaunchYear(-1);
+                                }} type="button" className="btn text-white bg-dark mt-3">Clear</button>
                             </center>
                         </div>
                     </div>
@@ -209,7 +230,9 @@ export const Home = () => {
                 </div >
             </>
         );
-    else {
+    else if (!reLoad) {
         return <><center><h1>No Data is found</h1></center></>;
+    } else {
+        return <center><h1>loading</h1></center>;
     }
 }
